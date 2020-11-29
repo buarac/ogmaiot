@@ -16,6 +16,8 @@ void display_node(ogma_node_handle_t node) {
     }
 }
 
+
+
 void app_main(void) {
 
     ogma_node_handle_t node = ogma_node_create();
