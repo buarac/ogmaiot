@@ -5,6 +5,11 @@ const char* TAG = "OGMA_NODE";
 static ogma_node_handle_t node_list[OGMA_NODE_MAX_NUMBER];
 static int node_list_count;
 
+typedef struct {
+    uint16_t    count;
+    ogma_node_t list[OGMA_NODE_MAX_NUMBER];
+} ogma_nodelist_t;
+
 ogma_node_handle_t ogma_node_create() {
     ESP_LOGD(TAG, "ogma_node_create");
 
