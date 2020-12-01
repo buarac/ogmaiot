@@ -1,7 +1,7 @@
 
 idf_component_register(
-    SRCS "node.c"
+    SRCS "nodelist.c"
     INCLUDE_DIRS include
     PRIV_INCLUDE_DIRS "include"
-    REQUIRES common
+    REQUIRES node
 )

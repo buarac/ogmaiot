@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.5)
 set(EXTRA_COMPONENT_DIRS 
     "../components/common"
     "../components/node"
+    "../components/nodelist"
 )
 
 set(PROJECT_VER "0.0.0.1")

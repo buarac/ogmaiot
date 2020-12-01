@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../components"
+		}
+	],
+	"settings": {
+		"idf.port": "/dev/cu.usbserial-220",
+		"files.associations": {
+			"__node_handle": "c"
+		}
+	}
+}

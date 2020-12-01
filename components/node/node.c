@@ -1,36 +1,55 @@
-#include "ogma_node.h"
+#include "node.h"
 
-const char* TAG = "OGMA_NODE";
+const static char* TAG = "NODE";
 
-static ogma_node_handle_t node_list[OGMA_NODE_MAX_NUMBER];
+/*
+static node_handle_t node_list[OGMA_NODE_MAX_NUMBER];
 static int node_list_count;
 
 typedef struct {
     uint16_t    count;
     ogma_node_t list[OGMA_NODE_MAX_NUMBER];
 } ogma_nodelist_t;
+*/
 
-ogma_node_handle_t ogma_node_create() {
-    ESP_LOGD(TAG, "ogma_node_create");
+node_handle_t node_create() {
+    ESP_LOGD(TAG, "node_create");
 
-    ogma_node_t* node = calloc(1, sizeof(ogma_node_t));
+    node_dev_t* node = calloc(1, sizeof(node_dev_t));
     if ( node == NULL ) {
+        ESP_LOGE(TAG, "calloc failed");
         return NULL;
     }
-
-    return (ogma_node_handle_t)node;
+    node->status = NODE_UNREGISTRED;
+    return (node_handle_t)node;
 }
 
-esp_err_t ogma_node_delete(ogma_node_handle_t node) {
-    ESP_LOGD(TAG, "ogma_node_delete");
-    if ( node == NULL ) {
-        ESP_LOGI(TAG, "node is null");
+esp_err_t node_delete(node_handle_t handle) {
+    ESP_LOGD(TAG, "node_delete");
+    if ( handle == NULL ) {
+        ESP_LOGI(TAG, "node handle is null");
         return ESP_FAIL;
     }
+    node_dev_t* node = (node_dev_t*)handle;
     free(node);
     return ESP_OK;
 }
 
+void node_display(node_handle_t handle) {
+    if ( handle == NULL ) {
+        ESP_LOGD(TAG, "node to display is null");
+        return;
+    }
+    node_dev_t* node = (node_dev_t*)handle;
+    ESP_LOGI(TAG, "node name  : %s", node->name);
+    ESP_LOGI(TAG, "node id    : %d", node->id);
+    ESP_LOGI(TAG, "node mac   : "MACSTR"", MAC2STR(node->mac_addr));
+    ESP_LOGI(TAG, "node status: %d", node->status);
+}
+
+
+
+/*
 esp_err_t ogma_nodelist_init() {
     ESP_LOGD(TAG, "ogma_nodelist_init()");
     for(int i=0; i < OGMA_NODE_MAX_NUMBER; i++) {
@@ -98,5 +117,5 @@ ogma_node_handle_t ogma_nodelist_nodeByMacAddress(uint8_t* mac_addr) {
     }
     return NULL;
 }
-
+*/
 
