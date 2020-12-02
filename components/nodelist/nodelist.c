@@ -1,5 +1,17 @@
 #include "nodelist.h"
 
+#define NODELIST_ASSERT_NOT_NULL  nodelist_dev_t* nl = (nodelist_dev_t*)nodelist_get_handle(); \
+    if( nl == NULL ) { \
+        ESP_LOGE(TAG,"nodelist is null -> %s:%d (%s)", __FILE__, __LINE__, __FUNCTION__); \
+        return NULL; \
+    } \
+
+#define NODELIST_ASSERT_INDEX(a) if ( idx < 0 || idx >= OGMA_NODE_MAX_NUMBER ) { \
+        ESP_LOGE(TAG, "Index out of bounds"); \
+        return NULL; \
+    } \
+
+
 const static char* TAG = "NODELIST";
 
 static nodelist_dev_t m_nList;
@@ -65,7 +77,7 @@ void nodelist_display_all() {
     nodelist_dev_t* nl = (nodelist_dev_t*)nodelist_get_handle();
     if ( nl == NULL ) {
         ESP_LOGE(TAG, "nodelist is null");
-        return ESP_FAIL;
+        return;
     }
     for(int i=0; i < OGMA_NODE_MAX_NUMBER; i++) {
         node_dev_t* node = nl->data[i];
@@ -75,60 +87,59 @@ void nodelist_display_all() {
     }
 }
 
-/*
+node_handle_t nodelist_get_by_index(int idx) {
+    ESP_LOGD(TAG, "node_get_by_index(%d)", idx);
 
-esp_err_t ogma_nodelist_new(char* name, uint16_t id, uint8_t* mac_addr) {
-    ESP_LOGD(TAG, "ogma_nodelist_new(%s, %d)", name, id);
+    NODELIST_ASSERT_NOT_NULL;
+    NODELIST_ASSERT_INDEX(idx);
 
-    if ( node_list_count >= OGMA_NODE_MAX_NUMBER ) {
-        ESP_LOGE(TAG, "max number of node");
-        return ESP_FAIL;
-    }
-
-    ogma_node_handle_t node = ogma_node_create();
-    if ( node != NULL ) {
-        ogma_node_t* n = (ogma_node_t*)node;
-        strncpy(n->name, name, OGMA_NODE_NAME_LEN);
-        memcpy(n->mac_addr, mac_addr, ESP_NOW_ETH_ALEN);
-        n->id = id;
-        node_list[node_list_count++] = n;
-        return ESP_OK;
-    }
-    else {
-        return ESP_FAIL;
-    }
+    return (node_handle_t)nl->data[idx];
 }
 
-ogma_node_handle_t ogma_nodelist_nodeByIndex(int idx) {
-    ESP_LOGD(TAG, "ogma_nodelist_nodeByIndex(%d)", idx);
+node_handle_t nodelist_get_by_id(uint16_t id) {
+    ESP_LOGD(TAG, "nodelist_get_by_id(%d)", id);
 
-    if ( idx < 0 || ( idx >= node_list_count )) {
-        ESP_LOGE(TAG, "index out of bounds");
-        return NULL;
-    }
-    return node_list[idx];
-}
+    NODELIST_ASSERT_NOT_NULL;
 
-ogma_node_handle_t ogma_nodelist_nodeById(uint16_t id) {
-    ESP_LOGD(TAG, "ogma_nodelist_nodeById(%d)", id);
-    for(int i=0; i < node_list_count; i++) {
-        ogma_node_t* n = (ogma_node_t*)node_list[i];
-        if ( n->id == id ) {
-            return node_list[i];
+    for(int i=0; i < OGMA_NODE_MAX_NUMBER; i++) {
+        node_dev_t* node = (node_dev_t*)nl->data[i];
+        if ( node != NULL ) {
+            if ( node->id == id ) {
+                return (node_handle_t)node;
+            }
         }
     }
     return NULL;
 }
 
-ogma_node_handle_t ogma_nodelist_nodeByMacAddress(uint8_t* mac_addr) {
-    ESP_LOGD(TAG, "ogma_nodelist_nodeByMacAddress("MACSTR")", MAC2STR(mac_addr));
-    for(int i=0; i < node_list_count; i++) {
-        ogma_node_t* n = (ogma_node_t*)node_list[i];
-        if ( memcmp(n->mac_addr, mac_addr, ESP_NOW_ETH_ALEN) == 0 ) {
-            return node_list[i];            
+node_handle_t nodelist_get_by_mac(uint8_t* mac) {
+    ESP_LOGD(TAG, "nodelist_get_by_mac("MACSTR")", MAC2STR(mac));
+
+    NODELIST_ASSERT_NOT_NULL;
+
+    for(int i=0; i < OGMA_NODE_MAX_NUMBER; i++) {
+        node_dev_t* node = (node_dev_t*)nl->data[i];
+        if ( node != NULL ) {
+            if ( memcmp(node->mac_addr, mac, ESP_NOW_ETH_ALEN) == 0 ) {
+                return (node_handle_t)node;
+            }
         }
     }
     return NULL;
 }
-*/
 
+node_handle_t nodelist_get_by_name(char* name) {
+    ESP_LOGD(TAG, "nodelist_get_by_name(%s)", name);
+
+    NODELIST_ASSERT_NOT_NULL;
+
+    for(int i=0; i < OGMA_NODE_MAX_NUMBER; i++) {
+        node_dev_t* node = (node_dev_t*)nl->data[i];
+        if ( node != NULL ) {
+            if ( strcmp(node->name, name) == 0 ) {
+                return (node_handle_t)node;
+            }
+        }
+    }
+    return NULL;
+}

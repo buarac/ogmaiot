@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../components"
+		},
+		{
+			"path": "../../esp-iot-solution"
 		}
 	],
 	"settings": {

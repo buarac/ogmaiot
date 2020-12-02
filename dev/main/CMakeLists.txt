@@ -1,4 +1,4 @@
-set(COMPONENT_SRCS "ogma_dev.c")
+set(COMPONENT_SRCS "ogma_dev.cpp")
 
 register_component()
 
