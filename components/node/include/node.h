@@ -9,7 +9,9 @@ extern "C"
 #endif
 
 typedef enum {
-    NODE_UNREGISTRED = -1
+    NODE_UNREGISTRED = -1,
+    NODE_UNDEFINED,
+    NODE_REGISTRED
 } node_status_t;
 
 typedef struct {
@@ -21,12 +23,19 @@ typedef struct {
 
 typedef void* node_handle_t;
 
-
 node_handle_t node_create();
 esp_err_t node_delete(node_handle_t handle);
 void node_display(node_handle_t handle);
+
 void node_set_id(node_handle_t handle, uint16_t id);
+void node_set_name(node_handle_t handle, char* name);
+void node_set_mac(node_handle_t handle, uint8_t* mac);
+void node_set_status(node_handle_t handle, node_status_t status);
+
 uint16_t node_get_id(node_handle_t handle);
+char* node_get_name(node_handle_t handle);
+uint8_t* node_get_mac(node_handle_t handle);
+node_status_t node_get_status(node_handle_t handle);
 
 #ifdef __cplusplus
 }
@@ -46,8 +55,16 @@ class CNode {
         ~CNode();
 
         void Display(void);
-        uint16_t GetId();
+
         void SetId(uint16_t id);
+        void SetName(char* name);
+        void SetMac(uint8_t* mac);
+        void SetStatus(node_status_t status);
+
+        uint16_t GetId();
+        char* GetName();
+        uint8_t* GetMac();
+        node_status_t GetStatus();
 };
 
 #endif // __cplusplus

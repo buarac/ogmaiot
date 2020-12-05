@@ -35,24 +35,38 @@ esp_err_t node_delete(node_handle_t handle) {
     return ESP_OK;
 }
 
-void node_set_id(node_handle_t handle, uint16_t id) {
-    ESP_LOGD(TAG, "node_set_id(%d)", id);
+void node_set_id(node_handle_t handle, uint16_t id) { 
+    ((node_dev_t*)handle)->id = id; 
+}
 
-    if ( handle == NULL ) {
-        ESP_LOGD(TAG, "node to display is null");
-        return;
-    }
-    ((node_dev_t*)handle)->id = id;
+void node_set_name(node_handle_t handle, char* name) {
+    node_dev_t* node = (node_dev_t*)handle;
+    strncpy(node->name, name, OGMA_NODE_NAME_LEN);
+    node->name[OGMA_NODE_NAME_LEN] = '\0';
+}
+
+void node_set_mac(node_handle_t handle, uint8_t* mac) {
+    memcpy(((node_dev_t*)handle)->mac_addr, mac, ESP_NOW_ETH_ALEN);
+}
+
+void node_set_status(node_handle_t handle, node_status_t status) {
+    ((node_dev_t*)handle)->status = status;
 }
 
 uint16_t node_get_id(node_handle_t handle) {
-    ESP_LOGD(TAG, "node_get_id");
-
-    if ( handle == NULL ) {
-        ESP_LOGD(TAG, "node to display is null");
-        return 0;
-    }
     return ((node_dev_t*)handle)->id;
+}
+
+char* node_get_name(node_handle_t handle) {
+    return ((node_dev_t*)handle)->name;
+}
+
+uint8_t* node_get_mac(node_handle_t handle) {
+    return ((node_dev_t*)handle)->mac_addr;
+}
+
+node_status_t node_get_status(node_handle_t handle) {
+    return ((node_dev_t*)handle)->status;
 }
 
 void node_display(node_handle_t handle) {
