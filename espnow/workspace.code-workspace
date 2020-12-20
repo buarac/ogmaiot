@@ -20,6 +20,7 @@
 		"idf.port": "/dev/cu.usbserial-0001",
 		"files.associations": {
 			"__node_handle": "c"
-		}
+		},
+		"git.ignoreLimitWarning": true
 	}
 }

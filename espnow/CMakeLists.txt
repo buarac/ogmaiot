@@ -2,15 +2,15 @@
 # CMakeLists in this exact order for cmake to work correctly
 cmake_minimum_required(VERSION 3.5)
 
-set(EXTRA_COMPONENT_DIRS 
-   "../components/common"
-   "../components/node"
+#set(EXTRA_COMPONENT_DIRS 
+#   "../components/common"
+#   "../components/node"
 #  "../components/nodelist"
-)
+#)
 
 set(PROJECT_VER "0.0.0.1")
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 add_compile_options (-fdiagnostics-color=always)
-project(ogma_dev)
+project(ogma_espnow)
 

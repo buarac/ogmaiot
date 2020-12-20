@@ -1,5 +1,5 @@
 #include "node.h"
-#include "nodelist.h"
+//#include "nodelist.h"
 
 uint8_t mac1[6] = { 0x56, 0x67, 0x12, 0xAB, 0xFE, 0x01};
 uint8_t mac2[6] = { 0xbc, 0xa1, 0x83, 0xcd, 0x10, 0x50};
@@ -29,4 +29,18 @@ void app_main(void) {
     node1.SetMac(mac1);
     node1.SetStatus(NODE_REGISTRED);
     node1.Display();
+
+    node_handle_t node = node_create();
+
+    node_set_id(node, 1051);
+    node_set_name(node, "TESTAVECDEVENC");
+    node_set_mac(node, mac2);
+    node_set_status(node, NODE_REGISTRED);
+    node_display(node);
+
+    NODE_SET(node, 2020, "LESYSTEMLECHUZA", mac1, NODE_UNDEFINED);
+    node_display(node);
+
+    CNode node3(node);
+    node3.Display();
 }

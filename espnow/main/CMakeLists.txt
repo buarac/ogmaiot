@@ -1,5 +1,6 @@
-set(COMPONENT_SRCS "ogma_dev.cpp")
+#set(COMPONENT_SRCS "ogma_dev.cpp")
 #set (COMPONENT_SRCS "ogma_espnow.c")
+set (COMPONENT_SRCS "espnow.c")
 
 register_component()
 

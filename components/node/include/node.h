@@ -3,6 +3,12 @@
 
 #include "ogma_common.h"
 
+#define NODE_SET(n, id, name, mac, status) \
+    node_set_id(n, id); \
+    node_set_name(n, name); \
+    node_set_mac(n, mac); \
+    node_set_status(n, status); \
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -52,6 +58,7 @@ class CNode {
     public:
         CNode();
         CNode(uint16_t id, char* name, uint8_t* mac);
+        CNode(node_handle_t node_handle);
         ~CNode();
 
         void Display(void);
